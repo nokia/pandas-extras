@@ -10,5 +10,4 @@ concatenate_columns, expand_list, expand_lists, extract_dict_key, extract_dictio
 )
 from .util import check_duplicated_labels
 
-name = 'pandas-extras' # pylint: disable=invalid-name
-__version__ = '0.0.1'
+__version__ = '0.0.2'

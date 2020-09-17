@@ -5,10 +5,15 @@ verify_ssl = true
 
 [dev-packages]
 coverage = "*"
+pylint = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
+setuptools = "*"
+twine = "*"
+wheel = "*"
 
 [packages]
+numpy = "*"
 pandas = "*"
 pandas-extras = {editable = true,path = "."}
 

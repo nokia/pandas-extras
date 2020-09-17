@@ -21,7 +21,6 @@ df = DataFrame(...)
 df.pipe(expand_lists, *args, **kwargs)
 ```
 
-
 ## License
 
 This project is licensed under the BSD-3-Clause license - see the [LICENSE](https://github.com/nokia/pandas-extras/blob/master/LICENSE).
