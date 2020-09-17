@@ -1,4 +1,8 @@
 # pandas-extras
+![Lint](https://github.com/nokia/pandas-extras/workflows/Pylint/badge.svg)
+![Tests](https://github.com/nokia/pandas-extras/workflows/Coverage/badge.svg)
+[![Documentation Status](https://readthedocs.org/projects/pandas-extras/badge/?version=latest)](https://pandas-extras.readthedocs.io/en/latest/?badge=latest)
+
 Extension package for the popular Pandas library
 
 # Installation
@@ -16,7 +20,6 @@ from pandas_extras import expand_lists
 df = DataFrame(...)
 df.pipe(expand_lists, *args, **kwargs)
 ```
-
 
 ## License
 

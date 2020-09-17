@@ -27,7 +27,8 @@ class NativeDict(dict):
 
             .. warning::
 
-                Only :class:`Timestamp <pandas.Timestamp>` and numpy :class:`dtypes <numpy.dtype>` are converted.
+                Only :class:`Timestamp <pandas.Timestamp>` and numpy :class:`dtypes <numpy.dtype>`
+                are converted.
         """
         if pd.isnull(value):
             return None
@@ -53,23 +54,29 @@ def clear_nan(dataframe):
 
 def convert_to_type(dataframe, mapper, *types, kwargs_map=None):
     r"""
-        Converts columns to types specified by the ``mapper``. In case of ``integer``, ``float``, ``signed`` and
-        ``unsigned`` typecasting, the smallest possible type will be chosen. See more details at
-        :func:`to_numeric() <pandas.to_numeric>`.
+        Converts columns to types specified by the ``mapper``. In case of ``integer``, ``float``,
+        ``signed`` and ``unsigned`` typecasting, the smallest possible type will be chosen. See
+        more details at :func:`to_numeric() <pandas.to_numeric>`.
 
         .. code-block:: python
 
             >>> df = pd.DataFrame({
-            ...    'date': ['05/06/2018', '05/04/2018'],
-            ...    'datetime': [156879000, 156879650],
-            ...    'number': ['1', '2.34'],
-            ...    'int': [4, 8103],
-            ...    'float': [4.0, 8103.0],
-            ...    'object': ['just some', 'strings']
-            ...})
-            >>> mapper = {'number': 'number', 'integer': 'int', 'float': 'float', 'date': ['date', 'datetime']}
+            ...     'date': ['05/06/2018', '05/04/2018'],
+            ...     'datetime': [156879000, 156879650],
+            ...     'number': ['1', '2.34'],
+            ...     'int': [4, 8103],
+            ...     'float': [4.0, 8103.0],
+            ...     'object': ['just some', 'strings']
+            ... })
+            >>> mapper = {
+            ...     'number': 'number', 'integer': 'int', 'float': 'float',
+            ...     'date': ['date', 'datetime']
+            ... }
             >>> kwargs_map = {'datetime': {'unit': 'ms'}}
-            >>> df.pipe(convert_to_type, mapper, 'integer', 'date', 'number', 'float', kwargs_map=kwargs_map).dtypes
+            >>> df.pipe(
+            ...    convert_to_type, mapper, 'integer', 'date',
+            ...    'number', 'float', kwargs_map=kwargs_map
+            ... ).dtypes
             date        datetime64[ns]
             datetime    datetime64[ns]
             number             float64
@@ -80,12 +87,15 @@ def convert_to_type(dataframe, mapper, *types, kwargs_map=None):
 
         :param dataframe: The DataFrame object to work on.
         :type dataframe: :class:`DataFrame <pandas.DataFrame>`
-        :param dict mapper: Dict with column names as values and any of the following keys: ``number``, ``integer``,
-                       ``float``, ``signed``, ``unsigned``, ``date`` and ``datetime``.
-        :param str \*types: any number of keys from the mapper. If omitted, all keys from ``mapper`` will be used.
-        :param dict kwargs_map: Dict of keyword arguments to apply to :func:`to_datetime() <pandas.to_datetime>` or
-                                :func:`to_numeric() <pandas.to_numeric>`. Keys must be the column names, values are
-                                the kwargs dict.
+        :param dict mapper: Dict with column names as values and any of the following keys:
+                            ``number``, ``integer``, ``float``, ``signed``, ``unsigned``, ``date``
+                            and ``datetime``.
+        :param str \*types: any number of keys from the mapper. If omitted, all keys from
+                            ``mapper`` will be used.
+        :param dict kwargs_map: Dict of keyword arguments to apply to
+                                :func:`to_datetime() <pandas.to_datetime>` or
+                                :func:`to_numeric() <pandas.to_numeric>`.
+                                Keys must be the column names, values are the kwargs dict.
 
         :returns: The converted dataframe
         :rtype: :class:`DataFrame <pandas.DataFrame>`
@@ -101,11 +111,17 @@ def convert_to_type(dataframe, mapper, *types, kwargs_map=None):
             if column in list(dataframe):
                 kwargs = kwargs_map.get(column, {})
                 if _type == 'number':
-                    dataframe[column] = dataframe[column].apply(pd.to_numeric, errors='coerce', **kwargs)
+                    dataframe[column] = dataframe[column].apply(
+                        pd.to_numeric, errors='coerce', **kwargs
+                    )
                 elif _type in ('date', 'datetime'):
-                    dataframe[column] = dataframe[column].apply(pd.to_datetime, errors='coerce', utc=True, **kwargs)
+                    dataframe[column] = dataframe[column].apply(
+                        pd.to_datetime, errors='coerce', utc=True, **kwargs
+                    )
                 elif _type in ('integer', 'float', 'signed', 'unsigned'):
-                    dataframe[column] = dataframe[column].apply(pd.to_numeric, errors='coerce', downcast=_type)
+                    dataframe[column] = dataframe[column].apply(
+                        pd.to_numeric, errors='coerce', downcast=_type
+                    )
     return dataframe
 
 
