@@ -13,6 +13,7 @@ setup(
     version=pe_version,
     description='Extension package for the popular Pandas library',
     long_description=LONG_DESCRIPTION,
+    long_description_content_type="text/markdown",
     maintainer='Hodossy, Szabolcs',
     maintainer_email='hodossy.szabolcs@gmail.com',
     url='https://github.com/nokia/pandas-extras',
