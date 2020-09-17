@@ -10,4 +10,4 @@ concatenate_columns, expand_list, expand_lists, extract_dict_key, extract_dictio
 )
 from .util import check_duplicated_labels
 
-__version__ = '0.0.2'
+__version__ = '0.0.4'
