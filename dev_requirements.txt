@@ -3,3 +3,6 @@ coverage
 pylint
 sphinx
 sphinx_rtd_theme
+setuptools
+twine
+wheel

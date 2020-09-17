@@ -1,4 +1,5 @@
 # pandas-extras
+[![Documentation Status](https://readthedocs.org/projects/pandas-extras/badge/?version=latest)](https://pandas-extras.readthedocs.io/en/latest/?badge=latest)
 Extension package for the popular Pandas library
 
 # Installation

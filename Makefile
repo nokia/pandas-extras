@@ -17,3 +17,9 @@ coverage:
 .PHONY: docs
 docs:
 	@python -m sphinx -b html docs docs/_build
+
+
+.PHONY: publish
+publish:
+	@python setup.py sdist bdist_wheel
+	@twine upload dist/*
