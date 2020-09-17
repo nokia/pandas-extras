@@ -103,7 +103,9 @@ def get_adjacency_list_depth(dataframe, parent, right_on=None, new_column='depth
             6   6           2           2
             7   7           6           3
 
-            >>> df.set_index('employee').pipe(get_adjacency_list_depth, 'manager', new_column='level')
+            >>> df.set_index('employee').pipe(
+            ...     get_adjacency_list_depth, 'manager', new_column='level'
+            ... )
                         manager     level
             employee
             0           NaN         0
@@ -119,7 +121,8 @@ def get_adjacency_list_depth(dataframe, parent, right_on=None, new_column='depth
         :type dataframe: :class:`DataFrame <pandas.DataFrame>`
         :param str parent: The name of the column that contains the parent id.
         :param str right_on: Name of the primary key column. If not given, the indices will be used.
-        :param str new_column: Name of the new column to be created. By default `depth` will be used.
+        :param str new_column: Name of the new column to be created. By default `depth` will be
+                               used.
 
         :returns: The flattened DataFrame
         :rtype: :class:`DataFrame <pandas.DataFrame>`

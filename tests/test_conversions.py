@@ -1,6 +1,7 @@
 import unittest
 from datetime import datetime
 
+import numpy as np
 import pandas as pd
 import pandas.api.types as ptypes
 from pandas.testing import assert_frame_equal
@@ -10,13 +11,13 @@ from pandas_extras import NativeDict, clear_nan, convert_to_type, truncate_strin
 class ConversionsTestCase(unittest.TestCase):
 
     def test_convert_if_needed_pos_01(self):
-        self.assertEqual(NativeDict.convert_if_needed(pd.np.NaN), None)
-        self.assertEqual(NativeDict.convert_if_needed(pd.np.int32(2)), 2)
-        self.assertEqual(NativeDict.convert_if_needed(pd.np.int32(2)), 2)
-        self.assertEqual(NativeDict.convert_if_needed(pd.np.uint32(2)), 2)
-        self.assertEqual(NativeDict.convert_if_needed(pd.np.uint64(2)), 2)
-        self.assertEqual(NativeDict.convert_if_needed(pd.np.float32(1.0)), 1.0)
-        self.assertEqual(NativeDict.convert_if_needed(pd.np.float64(1.0)), 1.0)
+        self.assertEqual(NativeDict.convert_if_needed(np.NaN), None)
+        self.assertEqual(NativeDict.convert_if_needed(np.int32(2)), 2)
+        self.assertEqual(NativeDict.convert_if_needed(np.int32(2)), 2)
+        self.assertEqual(NativeDict.convert_if_needed(np.uint32(2)), 2)
+        self.assertEqual(NativeDict.convert_if_needed(np.uint64(2)), 2)
+        self.assertEqual(NativeDict.convert_if_needed(np.float32(1.0)), 1.0)
+        self.assertEqual(NativeDict.convert_if_needed(np.float64(1.0)), 1.0)
 
     def test_to_dict_with_cls_pos_01(self):
         orig_dict_list = [
@@ -74,8 +75,8 @@ class ConversionsTestCase(unittest.TestCase):
 
     def test_clear_nan_pos_01(self):
         df = pd.DataFrame({
-            'testcol1': [1, 2, pd.np.NaN],
-            'testcol2': [pd.np.NaN, pd.np.NaN, 3],
+            'testcol1': [1, 2, np.NaN],
+            'testcol2': [np.NaN, np.NaN, 3],
             'testcol3': [1, 2, 3]
         })
 

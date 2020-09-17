@@ -1,5 +1,6 @@
 import unittest
 
+import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -73,7 +74,7 @@ class TransformationsTestCase(unittest.TestCase):
                     [1, 2],
                     [1],
                     [],
-                    pd.np.NaN,
+                    np.NaN,
                 ]
             }
         ).set_index(['trial_num', 'subject'])
@@ -298,15 +299,15 @@ class TransformationsTestCase(unittest.TestCase):
             {
                 'trial_num': [1, 2, 1, 2],
                 'subject': [1, 1, 2, 2],
-                'samples': [pd.np.NaN, pd.np.NaN, pd.np.NaN, pd.np.NaN]
+                'samples': [np.NaN, np.NaN, np.NaN, np.NaN]
             }
         )
         expected = pd.DataFrame(
             {
                 'trial_num': [1, 2, 1, 2],
                 'subject': [1, 1, 2, 2],
-                'samples': [pd.np.NaN, pd.np.NaN, pd.np.NaN, pd.np.NaN],
-                'newcol': [pd.np.NaN, pd.np.NaN, pd.np.NaN, pd.np.NaN]
+                'samples': [np.NaN, np.NaN, np.NaN, np.NaN],
+                'newcol': [np.NaN, np.NaN, np.NaN, np.NaN]
             }
         )
         assert_frame_equal(
@@ -490,7 +491,7 @@ class TransformationsTestCase(unittest.TestCase):
                 'test_4': 'TEST2'
             },
             {
-                'test_1': pd.np.NaN,
+                'test_1': np.NaN,
                 'test_2': None,
                 'test_3': 'TEST5',
                 'test_4': 'TEST6'

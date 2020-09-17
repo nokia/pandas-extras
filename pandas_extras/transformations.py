@@ -1,7 +1,13 @@
+"""
+    Contains functions to help transform columns data containing complex types,
+    like lists or dictionaries.
+"""
 from functools import reduce
 from itertools import zip_longest
 
+import numpy as np
 import pandas as pd
+
 
 def extract_dictionary(dataframe, column, key_list=None, prefix=None, separator='.'):
     """
@@ -32,27 +38,33 @@ def extract_dictionary(dataframe, column, key_list=None, prefix=None, separator=
         :param dataframe: The DataFrame object to work on.
         :type dataframe: :class:`DataFrame <pandas.DataFrame>`
         :param str column: The name of the column which should be extracted.
-        :param list key_list: Collection of keys that should be extracted. The new column names will be created from the
-                              key names.
-        :param str prefix: Prefix for new column names. By default, ``column`` will be applied as prefix.
-        :param str separator: The separator between the prefix and the key name for new column names.
+        :param list key_list: Collection of keys that should be extracted. The new column names
+                              will be created from the key names.
+        :param str prefix: Prefix for new column names. By default, ``column`` will be applied
+                           as prefix.
+        :param str separator: The separator between the prefix and the key name for new column
+                              names.
 
         :returns: The extracted DataFrame
         :rtype: :class:`DataFrame <pandas.DataFrame>`
     """
-    try:
-        key_list = key_list or next(val for val in dataframe[column] if isinstance(val, dict)).keys()
-    except StopIteration:
-        key_list = []
+    if key_list is None:
+        try:
+            key_list = next(val for val in dataframe[column] if isinstance(val, dict)).keys()
+        except StopIteration:
+            key_list = []
     for key in key_list:
         new_column = '{}{}{}'.format(prefix, separator, key) if prefix else prefix
-        dataframe = extract_dict_key(dataframe, column, key, new_column=new_column, separator=separator)
+        dataframe = extract_dict_key(
+            dataframe, column, key, new_column=new_column, separator=separator
+        )
     return dataframe.drop(column, axis=1)
 
 
 def extract_dict_key(dataframe, column, key, new_column=None, separator='.'):
     """
-        Extract values of ``key`` into ``new_column``. If key is missing, ``None`` is added to the column.
+        Extract values of ``key`` into ``new_column``. If key is missing, ``None`` is added to
+        the column.
 
         .. code-block:: python
 
@@ -77,8 +89,10 @@ def extract_dict_key(dataframe, column, key, new_column=None, separator='.'):
         :type dataframe: :class:`DataFrame <pandas.DataFrame>`
         :param str column: The name of the column which should be extracted.
         :param str key: Key that should be extracted.
-        :param str new_column: Name of the new column. By default, ``column`` will be applied as prefix to ``key``.
-        :param str separator: The separator between ``column`` and ``key`` if ``new_column`` is not specified.
+        :param str new_column: Name of the new column. By default, ``column`` will be applied as
+                               prefix to ``key``.
+        :param str separator: The separator between ``column`` and ``key`` if ``new_column`` is
+                              not specified.
 
         :returns: The extracted DataFrame
         :rtype: :class:`DataFrame <pandas.DataFrame>`
@@ -97,18 +111,18 @@ def expand_list(dataframe, column, new_column=None):
         .. code-block:: python
 
             >>> df = DataFrame({
-            ...    'trial_num': [1, 2, 3, 1, 2, 3],
-            ...    'subject': [1, 1, 1, 2, 2, 2],
-            ...    'samples': [
-            ...        [1, 2, 3, 4],
-            ...        [1, 2, 3],
-            ...        [1, 2],
-            ...        [1],
-            ...        [],
-            ...        None,
-            ...    ]
-            ...})
-            >>>df.pipe(expand_list, 'samples', new_column='sample_id').head(7)
+            ...     'trial_num': [1, 2, 3, 1, 2, 3],
+            ...     'subject': [1, 1, 1, 2, 2, 2],
+            ...     'samples': [
+            ...         [1, 2, 3, 4],
+            ...         [1, 2, 3],
+            ...         [1, 2],
+            ...         [1],
+            ...         [],
+            ...         None,
+            ...     ]
+            ... })
+            >>> df.pipe(expand_list, 'samples', new_column='sample_id').head(7)
                 trial_num  subject  sample_id
             0           1        1          1
             0           1        1          2
@@ -119,11 +133,12 @@ def expand_list(dataframe, column, new_column=None):
             1           2        1          3
 
         .. warning::
-            Between calls of ``expand_list`` and/or ``expand_lists``, the dataframe index duplications must be removed,
-            otherwise plenty of duplications will occur.
+            Between calls of ``expand_list`` and/or ``expand_lists``, the dataframe index
+            duplications must be removed, otherwise plenty of duplications will occur.
 
         .. warning::
-            Calling ``expand_list`` on multiple columns might cause data duplications, that shall be handled.
+            Calling ``expand_list`` on multiple columns might cause data duplications,
+            that shall be handled.
 
         :param dataframe: The DataFrame object to work on.
         :type dataframe: :class:`DataFrame <pandas.DataFrame>`
@@ -151,32 +166,34 @@ def expand_list(dataframe, column, new_column=None):
 
 def expand_lists(dataframe, columns, new_columns=None):
     """
-        Expands multiple lists to new rows. Pairs elements of lists respective to their index. Pads with ``None`` to
-        the longest list.
+        Expands multiple lists to new rows. Pairs elements of lists respective to their index.
+        Pads with ``None`` to the longest list.
 
         .. code-block:: python
 
             >>> df = DataFrame({
-            ...    'trial_num': [1, 2, 3, 1, 2, 3],
-            ...    'subject': [1, 1, 1, 2, 2, 2],
-            ...    'samples': [
-            ...        [1, 2, 3, 4],
-            ...        [1, 2, 3],
-            ...        [1, 2],
-            ...        [1],
-            ...        [],
-            ...        None,
-            ...    ],
-            ...    'samples2': [
-            ...        [1, 2],
-            ...        [1, 2, 3],
-            ...        [1, 2],
-            ...        [1],
-            ...        [],
-            ...        None,
-            ...    ]
-            ...})
-            >>>df.pipe(expand_lists, ['samples', 'samples'], new_column=['sample_id', 'sample_id2']).head(7)
+            ...     'trial_num': [1, 2, 3, 1, 2, 3],
+            ...     'subject': [1, 1, 1, 2, 2, 2],
+            ...     'samples': [
+            ...         [1, 2, 3, 4],
+            ...         [1, 2, 3],
+            ...         [1, 2],
+            ...         [1],
+            ...         [],
+            ...         None,
+            ...     ],
+            ...     'samples2': [
+            ...         [1, 2],
+            ...         [1, 2, 3],
+            ...         [1, 2],
+            ...         [1],
+            ...         [],
+            ...         None,
+            ...     ]
+            ... })
+            >>> df.pipe(
+            ...     expand_lists, ['samples', 'samples'], new_column=['sample_id', 'sample_id2']
+            ... ).head(7)
                 trial_num  subject  sample_id  sample_id2
             0           1        1          1           1
             0           1        1          2           2
@@ -187,11 +204,12 @@ def expand_lists(dataframe, columns, new_columns=None):
             1           2        1          3           3
 
         .. warning::
-            Between calls of ``expand_list`` and/or ``expand_lists``, the dataframe index duplications must be removed,
-            otherwise plenty of duplications will occur.
+            Between calls of ``expand_list`` and/or ``expand_lists``, the dataframe index
+            duplications must be removed, otherwise plenty of duplications will occur.
 
         .. warning::
-            Calling ``expand_lists`` on multiple columns might cause data duplications, that shall be handled.
+            Calling ``expand_lists`` on multiple columns might cause data duplications,
+            that shall be handled.
 
         :param dataframe: The DataFrame object to work on.
         :type dataframe: :class:`DataFrame <pandas.DataFrame>`
@@ -219,33 +237,40 @@ def expand_lists(dataframe, columns, new_columns=None):
         indices = pd.MultiIndex.from_tuples(indices, names=dataframe.index.names)
     else:
         indices = pd.Series(indices, name=dataframe.index.name)
-    return pd.DataFrame(values, columns=new_columns, index=indices).fillna(pd.np.nan).\
+    return pd.DataFrame(values, columns=new_columns, index=indices).fillna(np.nan).\
         merge(dataframe.drop(columns, axis=1), left_index=True, right_index=True, how='outer')
 
 
 def merge_columns(dataframe, col_header_list, new_column_name, keep=None, aggr=None):
     """
-        Add a new column or modify an existing one in *dataframe* called *new_column_name* by iterating over the
-        rows and select the proper notnull element from the values of *col_header_list* columns in the
-        given row if *keep* is filled OR call the *aggr* function with the values of *col_header_list*. Only one of
-        (*keep*, *aggr*) can be filled.
+        Add a new column or modify an existing one in *dataframe* called *new_column_name* by
+        iterating over the rows and select the proper notnull element from the values of
+        *col_header_list* columns in the given row if *keep* is filled OR call the *aggr*
+        function with the values of *col_header_list*. Only one of (*keep*, *aggr*) can be filled.
 
         :param dataframe: the pandas.DataFrame object to modify
         :param col_header_list: list of the names of the headers to merge
-        :param str new_column_name: the name of the new column, if it already exists the operation will overwrite it
-        :param str keep: Specify whether the first or the last proper value is needed. Possible values: *first* and
-                         *last* as string.
-        :param aggr: Callable function which will get the values of *col_header_list* as parameter. The return value of
-                     this function will be the value in *new_column_name*
-        :return: None
+        :param str new_column_name: the name of the new column, if it already exists the operation
+                                    will overwrite it
+        :param str keep: Specify whether the first or the last proper value is needed.
+                         values: *first* and *last* as string.
+        :param aggr: Callable function which will get the values of *col_header_list* as parameter.
+                     The return value of this function will be the value in *new_column_name*
+
+        :returns: The merged DataFrame
+        :rtype: :class:`DataFrame <pandas.DataFrame>`
     """
     if keep and aggr:
-        raise ValueError('Parameter keep and aggr can not be handled at the same time. Use only one.')
+        raise ValueError(
+            'Parameter keep and aggr can not be handled at the same time. Use only one.'
+        )
 
     old_columns = [x for x in col_header_list if x in list(dataframe)]
 
     if not old_columns:
-        raise ValueError('None of the following columns were found: {}'.format(', '.join(col_header_list)))
+        raise ValueError(
+            f'None of the following columns were found: {", ".join(col_header_list)}'
+        )
 
     if keep:
         if keep not in ('first', 'last'):
@@ -266,8 +291,8 @@ def merge_columns(dataframe, col_header_list, new_column_name, keep=None, aggr=N
 
 def concatenate_columns(dataframe, columns, new_column, descriptor=None, mapper=None):
     """
-        Concatenates `columns` together along the indeces and adds a `descriptor` column, if specified, with the column
-        name where the data originates from.
+        Concatenates `columns` together along the indeces and adds a `descriptor` column,
+        if specified, with the column name where the data originates from.
 
         .. code-block:: python
 
@@ -304,7 +329,10 @@ def concatenate_columns(dataframe, columns, new_column, descriptor=None, mapper=
     descriptor = descriptor or '_desc'
     parts = (
         pd.DataFrame(
-            data={new_column: dataframe[col], descriptor: [mapper.get(col, col) for _ in range(len(dataframe.index))]},
+            data={
+                new_column: dataframe[col],
+                descriptor: [mapper.get(col, col) for _ in range(len(dataframe.index))]
+            },
             index=dataframe.index
         ) for col in columns if col in dataframe
     )

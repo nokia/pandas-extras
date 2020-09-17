@@ -1,6 +1,12 @@
+"""
+    Contains utility functions.
+"""
+
+
 def check_duplicated_labels(dataframe):
     r"""
-        Checks if there are duplications on column labels. Raises `ValueError` if there is any duplicated label.
+        Checks if there are duplications on column labels. Raises `ValueError` if there is any
+        duplicated label.
 
         :param dataframe: The DataFrame object to work on.
         :type dataframe: :class:`DataFrame <pandas.DataFrame>`
