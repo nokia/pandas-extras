@@ -17,9 +17,13 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 import datetime
-import inspect
 import os
-import re
+import sys
+
+sys.path.insert(0, os.path.abspath('../pandas_extras'))
+
+from pandas_extras import __version__ as pe_version
+
 
 # -- Project information -----------------------------------------------------
 
@@ -29,9 +33,9 @@ author = 'Hodossy, Szabolcs'
 author_email = 'hodossy.szabolcs@gmail.com'
 
 # The short X.Y version
-version = '0.0.1'
+version = pe_version
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = version
 
 # Keyword, which indicates a todo
 todo_keywords = ["TODO", "FIXME"]
