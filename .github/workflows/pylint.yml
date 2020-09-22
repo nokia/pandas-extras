@@ -1,12 +1,13 @@
 name: Pylint
 
-on: [push]
+on:
+  push:
+    paths:
+      - '**.py'
 
 jobs:
-  build:
-
+  lint:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python

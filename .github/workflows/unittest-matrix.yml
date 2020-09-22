@@ -1,0 +1,29 @@
+name: Unit test matrix
+
+on:
+  push:
+    paths:
+      - '**.py'
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    name: Testing with Python ${{ matrix.python-version }} and pandas${{ matrix.pandas-version }} on ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: [3.6, 3.7, 3.8, 3.x]
+        pandas-version: ['>=1.0,<1.1', '>=1.1,<1.2', '']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install "pandas${{ matrix.pandas-version }}"
+    - name: Running unit test
+      run: |
+        python -m unittest discover tests
