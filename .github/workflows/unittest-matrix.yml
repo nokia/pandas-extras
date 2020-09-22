@@ -3,8 +3,9 @@ name: Unit test matrix
 on: [push]
 
 jobs:
-  build:
+  test:
     runs-on: ${{ matrix.os }}
+    name: Testing with Python ${{ matrix.python-version }} and pandas${{ matrix.pandas-version }} on ${{ matrix.os }}
     strategy:
       max-parallel: 36
       matrix:
