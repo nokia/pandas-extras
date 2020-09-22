@@ -1,13 +1,15 @@
 name: Unit test matrix
 
-on: [push]
+on:
+  push:
+    paths:
+      - '**.py'
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     name: Testing with Python ${{ matrix.python-version }} and pandas${{ matrix.pandas-version }} on ${{ matrix.os }}
     strategy:
-      max-parallel: 36
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: [3.6, 3.7, 3.8, 3.x]
