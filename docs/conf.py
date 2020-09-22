@@ -20,7 +20,7 @@ import datetime
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../pandas_extras'))
+sys.path.insert(0, os.path.abspath('..'))
 
 from pandas_extras import __version__ as pe_version
 
